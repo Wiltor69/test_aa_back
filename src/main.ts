@@ -23,7 +23,7 @@ async function bootstrap() {
     .setDescription('The API documentation for the TestBackend')
     .setVersion('1.0')
     .addBearerAuth()
-    .addTag('conference')
+    .addTag('testbackend')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
