@@ -3,9 +3,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from './db/mongoose.module';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [MongooseModule, UserModule],
+  imports: [MongooseModule, UserModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })
