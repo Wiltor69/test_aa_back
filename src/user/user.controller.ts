@@ -3,21 +3,21 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
-@Controller('user')
+@Controller('v1')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
+  @Post('add-user')
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
-  @Get()
+  @Get('get-users')
   findAll() {
     return this.userService.findAll();
   }
 
-  @Get(':id')
+  @Get('get-user/:id')
   findOne(@Param('id') id: string) {
     return this.userService.findOne(+id);
   }
