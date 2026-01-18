@@ -17,6 +17,7 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
+  app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()
     .setTitle('TEST BACKEND API')
@@ -27,7 +28,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('swagger', app, document);
 
   await app.listen(PORT, () => console.log(`Server started on port = ${PORT}`));
 }
