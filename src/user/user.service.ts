@@ -19,7 +19,7 @@ export class UserService {
 
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto): Promise<UserDocument> {
     const now = new Date();
 
     if (createUserDto.birthDate > now) {
