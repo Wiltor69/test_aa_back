@@ -43,7 +43,6 @@ export class UserService {
     const { page, limit, search, birthDate } = params;
     const skip = (page - 1) * limit;
 
-    // const filter: FilterQuery<UserDocument> = {};
     const filter: Record<string, any> = {};
 
     if (search) {
