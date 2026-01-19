@@ -34,8 +34,55 @@ export class UserService {
     return savedUser;
   }
 
-  findAll(): Promise<UserDocumentNoPassword[]> {
-    return this.userModel.find();
+  async findAll(params: {
+    page: number;
+    limit: number;
+    search?: string;
+    birthDate?: string;
+  }): Promise<any> {
+    const { page, limit, search, birthDate } = params;
+    const skip = (page - 1) * limit;
+
+    // const filter: FilterQuery<UserDocument> = {};
+    const filter: Record<string, any> = {};
+
+    if (search) {
+      filter.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { email: { $regex: search, $options: 'i' } },
+        { phone: { $regex: search, $options: 'i' } },
+      ];
+    }
+
+    if (birthDate) {
+      const date = new Date(birthDate);
+      if (!isNaN(date.getTime())) {
+        filter.birthDate = date;
+      }
+    }
+
+    const [users, total] = await Promise.all([
+      this.userModel
+        .find(filter)
+        .select('-password') // Скрываем пароль
+        .skip(skip)
+        .limit(limit)
+        .sort({ createdAt: -1 }) // Новые пользователи в начале
+        .exec(),
+      this.userModel.countDocuments(filter),
+    ]);
+    console.log(
+      `[UsersService] Fetching users: page=${page}, limit=${limit}, search=${search || 'none'}`,
+    );
+    return {
+      data: users,
+      meta: {
+        total,
+        page,
+        lastPage: Math.ceil(total / limit),
+        limit,
+      },
+    };
   }
 
   async findOne(id: string): Promise<UserDocumentNoPassword> {
